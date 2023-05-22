@@ -1,0 +1,21 @@
+{
+  "name": "get-azure-open-ai-service",
+  "version": "1.0.0",
+  "description": "Function that makes http call to an Azure Open Service API",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "prestart": "npm run build",
+    "start": "func start",
+    "test": "echo \"No tests yet...\""
+  },
+  "devDependencies": {
+    "@azure/functions": "^3.0.0",
+    "@types/node": "16.x",
+    "azure-functions-core-tools": "^4.x",
+    "typescript": "^4.0.0"
+  },
+  "dependencies": {
+    "dotenv": "^16.0.3"
+  }
+}
