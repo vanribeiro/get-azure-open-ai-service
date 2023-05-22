@@ -1,9 +1,9 @@
 import { AzureFunction, Context, HttpRequest } from "@azure/functions";
 import * as dotenv from 'dotenv';
+import { errors } from "./errors";
 
 dotenv.config();
-// criar uma função via linha de comando: 
-// https://learn.microsoft.com/pt-br/azure/azure-functions/create-first-function-cli-node?tabs=azure-cli%2Cbrowser&pivots=nodejs-model-v3
+
 // publish: func azure functionapp publish get-azure-open-ai-service
 
 const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
@@ -14,7 +14,7 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
 
     try {
         
-        const response = await fetch(URL, {
+        const response: Response = await fetch(URL, {
             method: 'POST',
             body: JSON.stringify(req.body),
             headers: {
@@ -23,15 +23,20 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
             }
         });
 
-        // TODO: write exceptions
-    
+        errors[response.status](context, req);
+
         const data = await response.json();
+
         context.res = {
-            // status: 200, /* Defaults to 200 */
-            body: data
+            body: data,
+            "Content-Type": "application/json"
         };
+
     } catch (error) {
-        throw error;
+        context.res = { 
+            status: 500,
+            message: 'Internal Server Error'
+        }
     }
 
 
